@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+declare -A sourcefiles
+sourcefiles["SystemA"]='/home/user1/in/SystemA.csv'
+sourcefiles["SystemB"]='/home/user2/in/SystemB.csv'
+sourcefiles["SystemC"]='/home/user3/in/SystemC.csv'
+sourcefiles["SystemD"]='/home/user4/in/SystemD.csv'
+
+declare -A destinationfiles
+destinationfiles["SystemA"]='/var/out/user1/SystemA.csv'
+destinationfiles["SystemB"]='/var/out/user2/SystemB.csv'
+destinationfiles["SystemC"]='/var/out/user3/SystemC.csv'
+destinationfiles["SystemD"]='/var/out/user4/SystemD.csv'
+
+
+for item in "${!sourcefiles[@]}" ; do
+    echo "KolumnName1,KolumnName2,KolumnaName3" > "${destinationfiles[$item]}"
+    awk -F'\t' '!/Element1|Element2^$/ {if (NR!=1) print $1","$3","$2} /Element1/{if (NR!=1) print $2","$3","$4}' "${sourcefiles[$item]}" >> "${destinationfiles[$item]}"
+done
